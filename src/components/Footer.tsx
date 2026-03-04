@@ -26,6 +26,7 @@ const Footer = () => (
           <p className="text-sm text-muted-foreground">Chandrika Vishwakarma</p>
           <p className="text-sm text-muted-foreground">Dolly Vishwakarma</p>
           <p className="text-sm text-muted-foreground">Preeti Thakur</p>
+          <p className="text-sm text-muted-foreground">Ishika Trivedi</p>
         </div>
       </div>
       <div className="mt-8 pt-6 border-t border-border text-center">
