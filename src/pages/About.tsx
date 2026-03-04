@@ -85,7 +85,7 @@ const About = () => {
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl font-bold text-foreground mb-12">Our Team</h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
-            {["Chandrika Vishwakarma", "Dolly Vishwakarma", "Preeti Thakur"].map((name) => (
+            {["Chandrika Vishwakarma", "Dolly Vishwakarma", "Preeti Thakur", "Ishika Trivedi"].map((name) => (
               <div key={name} className="bg-card rounded-2xl p-6 border border-border">
                 <div className="w-16 h-16 rounded-full bg-accent flex items-center justify-center mx-auto mb-4">
                   <span className="text-xl font-bold text-accent-foreground">{name[0]}</span>
