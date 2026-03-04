@@ -1,10 +1,12 @@
 import { Link, useLocation } from "react-router-dom";
 import { useState } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Sun, Moon } from "lucide-react";
+import { useThemeContext } from "./ThemeProvider";
 
 const Navbar = () => {
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
+  const { theme, toggleTheme } = useThemeContext();
 
   const links = [
     { to: "/", label: "Home" },
@@ -50,6 +52,13 @@ const Navbar = () => {
             >
               Sign Up
             </Link>
+            <button
+              onClick={toggleTheme}
+              className="p-2 rounded-lg bg-secondary text-secondary-foreground hover:bg-accent transition-colors"
+              aria-label="Toggle theme"
+            >
+              {theme === "light" ? <Moon size={18} /> : <Sun size={18} />}
+            </button>
           </div>
 
           {/* Mobile toggle */}
@@ -84,6 +93,13 @@ const Navbar = () => {
             <Link to="/signup" onClick={() => setIsOpen(false)} className="block px-3 py-2 rounded-lg text-sm font-medium bg-primary text-primary-foreground text-center">
               Sign Up
             </Link>
+            <button
+              onClick={toggleTheme}
+              className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-muted-foreground hover:bg-accent"
+            >
+              {theme === "light" ? <Moon size={18} /> : <Sun size={18} />}
+              {theme === "light" ? "Dark Mode" : "Light Mode"}
+            </button>
           </div>
         )}
       </div>
