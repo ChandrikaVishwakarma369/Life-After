@@ -13,7 +13,10 @@ import ReadMore from "./pages/ReadMore";
 import SignUp from "./pages/SignUp";
 import SignIn from "./pages/SignIn";
 import NotFound from "./pages/NotFound";
-
+import SelectOneMode from "./pages/SelectOneMode";
+import FamilyMode from "./pages/FamilyMode";
+import FriendMode from "./pages/FriendMode";
+import ProfessionalMode from "./pages/ProfessionalMode"
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -31,7 +34,12 @@ const App = () => (
             <Route path="/read-more" element={<ReadMore />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/signin" element={<SignIn />} />
+            <Route element={<SelectOneMode/>} path='/selectonemode'/>
+            <Route element={<FamilyMode/>} path='/family-mode'/>
+            <Route element={<FriendMode/>} path='/friend-mode'/>
+            <Route element={<ProfessionalMode/>} path='/professional-mode'/>
             <Route path="*" element={<NotFound />} />
+
           </Routes>
           <Footer />
         </BrowserRouter>
