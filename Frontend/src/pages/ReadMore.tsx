@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Brain, Shield, Heart, Users, Code, Database, Lock, Eye } from "lucide-react";
+import { Brain, Shield, Heart, Users, Code, Database, Lock, Eye, Cpu, MessageCircle, Scale, UserX } from "lucide-react";
 
 const ReadMore = () => {
   return (
@@ -43,20 +43,46 @@ const ReadMore = () => {
         <div className="max-w-5xl mx-auto">
           <h2 className="text-3xl font-bold text-center text-foreground mb-12">Challenges & Solutions</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="bg-card rounded-2xl p-8 border border-border">
-              <div className="w-12 h-12 rounded-xl bg-accent flex items-center justify-center mb-4">
-                <Eye className="text-accent-foreground" size={24} />
+            {[
+              {
+                icon: Eye,
+                title: "Ethical Framework",
+                desc: "Ensuring privacy, consent, and responsible usage at every step of the process.",
+              },
+              {
+                icon: Lock,
+                title: "Data Security",
+                desc: "Robust security measures against misuse and breaches to protect personal data.",
+              },
+              {
+                icon: MessageCircle,
+                title: "Emotional Impact",
+                desc: "Managing grief and psychological effects on users interacting with an AI of a deceased loved one.",
+              },
+              {
+                icon: Cpu,
+                title: "AI Accuracy",
+                desc: "Ensuring the AI Twin truly reflects the person's personality without generating misleading or false responses.",
+              },
+              {
+                icon: Scale,
+                title: "Legal & Consent Issues",
+                desc: "Handling legal rights of the deceased's digital identity and obtaining proper consent before and after death.",
+              },
+              {
+                icon: UserX,
+                title: "Misuse Prevention",
+                desc: "Preventing impersonation, fraud, or manipulation using someone's AI Twin without authorization.",
+              },
+            ].map((c) => (
+              <div key={c.title} className="bg-card rounded-2xl p-8 border border-border">
+                <div className="w-12 h-12 rounded-xl bg-accent flex items-center justify-center mb-4">
+                  <c.icon className="text-accent-foreground" size={24} />
+                </div>
+                <h3 className="text-lg font-bold text-foreground mb-2">{c.title}</h3>
+                <p className="text-sm text-muted-foreground">{c.desc}</p>
               </div>
-              <h3 className="text-lg font-bold text-foreground mb-2">Ethical Framework</h3>
-              <p className="text-sm text-muted-foreground">Ensuring privacy, consent, and responsible usage at every step of the process.</p>
-            </div>
-            <div className="bg-card rounded-2xl p-8 border border-border">
-              <div className="w-12 h-12 rounded-xl bg-accent flex items-center justify-center mb-4">
-                <Lock className="text-accent-foreground" size={24} />
-              </div>
-              <h3 className="text-lg font-bold text-foreground mb-2">Data Security</h3>
-              <p className="text-sm text-muted-foreground">Robust security measures against misuse and breaches to protect personal data.</p>
-            </div>
+            ))}
           </div>
         </div>
       </section>
@@ -76,9 +102,10 @@ const ReadMore = () => {
               <tbody>
                 {[
                   ["Frontend", "React.js + Tailwind CSS"],
-                  ["Backend", "Node.js + Express.js"],
-                  ["Data Storage", "MongoDB"],
-                  ["AI Core", "OpenAI API / Hugging Face"],
+                  ["Backend", "Python + FastAPI"],
+                  ["Data Storage", "ChromaDB"],
+                  ["AI Core", "Gemini API"],
+                  ["Voice Cloning", "ElevenLabs API"],
                   ["Deployment", "Vercel / Render / Firebase"],
                 ].map(([cat, tech]) => (
                   <tr key={cat} className="border-b border-border">
