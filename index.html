@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Priya AI Twin 👭</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #e5ddd5; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .chat-container { width: 400px; height: 620px; background: white; border-radius: 15px; display: flex; flex-direction: column; box-shadow: 0 10px 25px rgba(0,0,0,0.2); overflow: hidden; }
+        .header { background: #075e54; color: white; padding: 15px; text-align: center; font-size: 18px; }
+        .controls { padding: 10px; background: #f0f0f0; border-bottom: 1px solid #ddd; display: flex; gap: 5px; }
+        select { flex: 1; padding: 8px; border-radius: 5px; border: 1px solid #ccc; cursor: pointer; outline: none; }
+        #chatbox { flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 10px; background: #efe7dd; }
+        .msg { padding: 10px 15px; border-radius: 12px; max-width: 80%; font-size: 15px; line-height: 1.4; position: relative; }
+        .user-msg { align-self: flex-end; background: #dcf8c6; border-bottom-right-radius: 0; box-shadow: 0 1px 1px rgba(0,0,0,0.1); }
+        .ai-msg { align-self: flex-start; background: #ffffff; border-bottom-left-radius: 0; box-shadow: 0 1px 1px rgba(0,0,0,0.1); }
+        .typing { font-size: 13px; color: #555; padding: 5px 15px; display: none; font-style: italic; }
+        .input-area { padding: 10px; display: flex; align-items: center; background: #f0f0f0; gap: 8px; }
+        input { flex: 1; padding: 12px; border: none; border-radius: 25px; outline: none; font-size: 15px; }
+        .btn { border: none; padding: 10px; border-radius: 50%; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; width: 45px; height: 45px; }
+        .mic-btn { background: #128c7e; color: white; }
+        .send-btn { background: #075e54; color: white; }
+        .btn:hover { opacity: 0.8; transform: scale(1.05); }
+    </style>
+</head>
+<body>
+
+<div class="chat-container">
+    <div class="header">
+        <strong>Dolly AI Twin</strong><br><small>Online</small>
+    </div>
+    
+    <div class="controls">
+        <select id="mode">
+            <option value="friend">✌️ Friend Mode (Casual)</option>
+            <option value="family">❤️ Family Mode (Respectful)</option>
+            <option value="professional">💼 Professional Mode (Formal)</option>
+        </select>
+    </div>
+
+    <div id="chatbox">
+        <div class="msg ai-msg">Hi! Main Priya ki AI twin hoon. Kya haal hai yaar? Kuch puchna hai?</div>
+    </div>
+    
+    <div id="typing" class="typing">Priya is thinking...</div>
+
+    <div class="input-area">
+        <button class="btn mic-btn" onclick="startListening()" title="Bolo (Voice Input)">🎤</button>
+        <input type="text" id="userInput" placeholder="Type a message..." onkeypress="if(event.key==='Enter') sendMessage()">
+        <button class="btn send-btn" onclick="sendMessage()">➤</button>
+    </div>
+</div>
+
+<script>
+    const chatbox = document.getElementById('chatbox');
+    const typing = document.getElementById('typing');
+    const userInput = document.getElementById('userInput');
+
+    // 1. SEND MESSAGE FUNCTION
+    async function sendMessage() {
+        const text = userInput.value.trim();
+        const mode = document.getElementById('mode').value;
+
+        if (!text) return;
+
+        // User message UI mein add karo
+        chatbox.innerHTML += `<div class="msg user-msg">${text}</div>`;
+        userInput.value = "";
+        typing.style.display = "block";
+        chatbox.scrollTop = chatbox.scrollHeight;
+
+        try {
+            // BACKEND CALL (main.py se connect karega)
+            const response = await fetch('http://127.0.0.1:5000/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ query: text, mode: mode })
+            });
+
+            if (!response.ok) throw new Error("Backend not responding");
+
+            const data = await response.json();
+            typing.style.display = "none";
+
+            // AI Reply UI mein add karo
+            chatbox.innerHTML += `<div class="msg ai-msg">${data.reply}</div>`;
+            chatbox.scrollTop = chatbox.scrollHeight;
+
+            // Voice Output (AI bolegi)
+            speak(data.reply);
+
+        } catch (error) {
+            typing.style.display = "none";
+            chatbox.innerHTML += `<div class="msg ai-msg" style="color:red">Oops! Backend se connection nahi ho raha. Check karo ki main.py terminal mein chal raha hai?</div>`;
+            console.error(error);
+        }
+    }
+
+    // 2. VOICE INPUT (Mic Feature)
+    function startListening() {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (!SpeechRecognition) {
+            alert("Sorry, aapka browser voice recognition support nahi karta.");
+            return;
+        }
+
+        const recognition = new SpeechRecognition();
+        recognition.lang = 'hi-IN'; // Hindi/Hinglish support
+
+        recognition.onstart = () => {
+            userInput.placeholder = "Sun rahi hoon... Bolo!";
+        };
+
+        recognition.onresult = (event) => {
+            const transcript = event.results[0][0].transcript;
+            userInput.value = transcript;
+            userInput.placeholder = "Type a message...";
+            sendMessage(); // Automatically send after speaking
+        };
+
+        recognition.onerror = (e) => {
+            userInput.placeholder = "Type a message...";
+            console.error(e.error);
+        };
+
+        recognition.start();
+    }
+
+    // 3. VOICE OUTPUT (Priya's Voice Effect)
+    function speak(text) {
+        const synth = window.speechSynthesis;
+        const utterance = new SpeechSynthesisUtterance(text);
+        
+        const voices = synth.getVoices();
+        // Microsoft Heera ya Google Hindi voices dhoondna
+        let selectedVoice = voices.find(v => v.name.includes('Hindi') || v.name.includes('Female'));
+        
+        if (selectedVoice) utterance.voice = selectedVoice;
+        utterance.pitch = 1.3; // Female/Young tone
+        utterance.rate = 1.0;
+        synth.speak(utterance);
+    }
+
+    // Browser initialization for voices
+    window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
+</script>
+
+</body>
+</html>
